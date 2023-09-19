@@ -1,6 +1,6 @@
 # 在vercel部署django示例
 
-部署清单
+## 部署所需文件
 
 1、 requirements.txt
 2、 vercel_build.sh
@@ -25,6 +25,15 @@ DATABASES = {
     # }
 }
 ```
+
+如果需要使用云数据库，需要修改上面的配置，然后执行下面命令
+
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+## vercel部署截图
 
 配置截图
 

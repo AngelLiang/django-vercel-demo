@@ -5,9 +5,9 @@
 1、 requirements.txt
 2、 vercel_build.sh
 3、 vercel.json
-3、 修改wsig.py
+3、 修改wsgi.py
 
-## 修改wsig.py
+## 修改wsgi.py
 
 需要在wsgi.py文件里添加app变量
 

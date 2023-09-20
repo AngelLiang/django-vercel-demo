@@ -119,8 +119,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 # 添加静态文件的配置
-STATIC_ROOT = BASE_DIR/'staticfiles'
-STATICFILES_DIRS = [BASE_DIR/'static', ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static', ]
 
 
 # Default primary key field type

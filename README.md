@@ -5,7 +5,12 @@
 1、 requirements.txt
 2、 vercel_build.sh
 3、 vercel.json
-3、 修改wsgi.py
+4、 修改wsgi.py
+5、 修改settings.py
+
+## 添加 vercel.json 和 vercel_build.sh
+
+添加这两个文件，用于配置vercel
 
 ## 修改wsgi.py
 
@@ -18,18 +23,24 @@ application = get_wsgi_application()
 app = application
 ```
 
-## 修改setttings.py
+## 如何处理静态文件
+
+vercel处理django的静态文件，需要修改一下配置
+
+### 修改setttings.py
 
 添加收集静态文件的配置
 
+```python
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 ```
-STATICFILES_DIRS = [BASE_DIR/'static',]
-STATIC_ROOT = BASE_DIR/'staticfiles'
-```
+
+## 如何处理数据库配置
 
 如果不使用数据库，需要去掉默认的sqlite配置
 
-```
+```python
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
@@ -38,7 +49,26 @@ DATABASES = {
 }
 ```
 
-如果需要使用云数据库，需要修改上面的配置，然后执行下面命令
+如果需要使用 vercel 的 postgresql 数据库，在 vercel 配置好数据库后，修改 settings.py 。
+
+注意，连接 vercel 的 postgresql 数据库需要安全链接
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('POSTGRES_DATABASE', 'verceldb'),
+        'USER': os.getenv('POSTGRES_USER', 'default'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': os.getenv('POSTGRES_HOST', '127.0.0.1'),
+        'PORT': int(os.getenv('POSTGRES_PORT', 5432)),
+        # vercel 的 postgresql 需要安全链接
+        'OPTIONS': {'sslmode': 'require'},
+    }
+}
+```
+
+之后执行下面命令进行数据库迁移
 
 ```
 python manage.py makemigrations

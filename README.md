@@ -12,11 +12,50 @@
 
 添加这两个文件，用于配置vercel
 
+vercel.json 用于配置vercel
+
+```json
+{
+    "version": 2,
+    "builds": [
+        {
+        "src": "config/wsgi.py",
+        "use": "@vercel/python",
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+        },
+        {
+        "src": "vercel_build.sh",
+        "use": "@vercel/static-build",
+        "config": {
+            "distDir": "staticfiles"
+            }
+        }
+    ],
+    "routes": [
+        {
+        "src": "/static/(.*)",
+        "dest": "/$1"
+        },
+        {
+        "src": "/(.*)",
+        "dest": "config/wsgi.py"
+        }
+    ]
+}
+```
+
+vercel_build.sh 用于安装依赖库，收集静态资源文件
+
+```
+pip install -r requirements.txt
+python3.9 manage.py collectstatic --noinput
+```
+
 ## 修改wsgi.py
 
 需要在wsgi.py文件里添加app变量
 
-```
+```python
 application = get_wsgi_application()
 
 # 添加这一句
@@ -25,11 +64,9 @@ app = application
 
 ## 如何处理静态文件
 
-vercel处理django的静态文件，需要修改一下配置
+vercel处理django的静态文件，需要修改setttings.py
 
-### 修改setttings.py
-
-添加收集静态文件的配置
+添加收集静态文件的配置，收集到 staticfiles 文件夹
 
 ```python
 STATIC_ROOT = BASE_DIR / 'staticfiles'

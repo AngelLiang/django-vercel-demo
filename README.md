@@ -1,5 +1,7 @@
 # 在vercel部署django示例
 
+20240619：现在需要配置nodejs为18.x才可以部署。
+
 ## 部署所需文件
 
 1、 requirements.txt
